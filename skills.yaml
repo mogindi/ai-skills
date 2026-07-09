@@ -1,0 +1,174 @@
+schema_version: 1
+
+constraints:
+  allowed_statuses:
+    - experimental
+    - approved
+    - deprecated
+  allowed_execution_backends:
+    - swarm
+    - short_lived_kubernetes_job
+    - gitops_pr
+  allowed_permissions:
+    - IDP-Platform-Engineers
+    - IDP-Security
+  allowed_models:
+    - qwen-coder-sec-7b
+    - qwen-coder-sec-2.5b
+    - external-gpt-high
+
+defaults:
+  source_repo: https://github.com/mogindi/ai-skills.git
+  source_ref: main
+
+skills:
+  terraform_security_review:
+    description: Reviews Terraform for security risks
+    status: approved
+    required_ad_group: IDP-Platform-Engineers
+    allowed_models:
+      - qwen-coder-sec-7b
+      - qwen-coder-sec-2.5b
+    approval_required: false
+    execution_backend: swarm
+    source_path: skills/terraform-security-review
+    version: 0.1.0
+    owner: IDP-Platform-Engineers
+    last_validated_at: "2026-07-08"
+    swarm:
+      max_rounds: 3
+      acceptance_criteria:
+        - Terraform scope is identified
+        - Developer remediation notes are produced
+        - Tester validation notes are produced
+        - Auditor blocking findings are resolved
+        - Project manager accepts delivery
+      roles:
+        - id: iac-developer-1
+          role: developer
+          phase: develop
+        - id: iac-developer-2
+          role: developer
+          phase: develop
+        - id: iac-tester
+          role: tester
+          phase: test
+          blocking_rules:
+            - missing_validation_evidence
+        - id: iac-security-auditor
+          role: auditor
+          phase: audit
+          blocking_rules:
+            - unresolved_security_findings
+        - id: iac-project-manager
+          role: project_manager
+          phase: delivery
+          blocking_rules:
+            - unresolved_security_findings
+            - unmet_acceptance_criteria
+
+  terraform_iac_development:
+    description: Develops Terraform IaC artifacts with swarm review gates
+    status: approved
+    required_ad_group: IDP-Platform-Engineers
+    allowed_models:
+      - qwen-coder-sec-7b
+      - qwen-coder-sec-2.5b
+    approval_required: false
+    can_write_artifacts: true
+    execution_backend: swarm
+    source_path: skills/terraform-iac-development
+    version: 0.1.0
+    owner: IDP-Platform-Engineers
+    last_validated_at: "2026-07-08"
+    swarm:
+      max_rounds: 3
+      acceptance_criteria:
+        - Terraform file for requested infrastructure is generated
+        - No passwords or secrets are written into Terraform
+        - Tester validation notes are produced
+        - Auditor blocking findings are resolved
+        - Project manager accepts delivery
+      roles:
+        - id: iac-developer-1
+          role: developer
+          phase: develop
+        - id: iac-developer-2
+          role: developer
+          phase: develop
+        - id: iac-tester
+          role: tester
+          phase: test
+          blocking_rules:
+            - missing_validation_evidence
+        - id: iac-security-auditor
+          role: auditor
+          phase: audit
+          blocking_rules:
+            - unresolved_security_findings
+        - id: iac-project-manager
+          role: project_manager
+          phase: delivery
+          blocking_rules:
+            - unresolved_security_findings
+            - unmet_acceptance_criteria
+
+  production_security_audit:
+    description: Audits production service security posture
+    status: approved
+    required_ad_group: IDP-Security
+    allowed_models:
+      - qwen-coder-sec-7b
+      - qwen-coder-sec-2.5b
+      - external-gpt-high
+    approval_required: true
+    execution_backend: swarm
+    source_path: skills/production-security-audit
+    version: 0.1.0
+    owner: IDP-Security
+    last_validated_at: "2026-07-08"
+    swarm:
+      max_rounds: 3
+      acceptance_criteria:
+        - Task scope is identified
+        - Developer remediation notes are produced
+        - Tester validation notes are produced
+        - Auditor blocking findings are resolved
+        - Project manager accepts delivery
+      roles:
+        - id: developer-1
+          role: developer
+          phase: develop
+        - id: developer-2
+          role: developer
+          phase: develop
+        - id: tester
+          role: tester
+          phase: test
+          blocking_rules:
+            - missing_validation_evidence
+        - id: security-auditor
+          role: auditor
+          phase: audit
+          blocking_rules:
+            - unresolved_security_findings
+        - id: project-manager
+          role: project_manager
+          phase: delivery
+          blocking_rules:
+            - unresolved_security_findings
+            - unmet_acceptance_criteria
+
+  ai_skill_developer:
+    description: Creates or updates AI skill folders through a PR-only GitOps workflow
+    status: approved
+    required_ad_group: IDP-Platform-Engineers
+    allowed_models:
+      - qwen-coder-sec-7b
+      - qwen-coder-sec-2.5b
+    approval_required: true
+    execution_backend: gitops_pr
+    source_path: skills/ai-skill-developer
+    version: 0.1.0
+    owner: IDP-Platform-Engineers
+    last_validated_at: "2026-07-08"

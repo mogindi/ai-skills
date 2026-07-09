@@ -1,0 +1,20 @@
+name: dispatch-port-gitops
+on:
+  push:
+    branches: [main]
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch Port catalog apply
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PORT_IO_POC_DISPATCH_TOKEN }}
+          repository: mogindi/port-io-poc
+          event-type: ai-skills-updated
+          client-payload: |
+            {
+              "repository": "${{ github.repository }}",
+              "ref": "${{ github.ref_name }}",
+              "sha": "${{ github.sha }}"
+            }
