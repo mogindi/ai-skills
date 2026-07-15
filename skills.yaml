@@ -213,3 +213,51 @@ skills:
         blocking_rules:
         - unresolved_security_findings
         - unmet_acceptance_criteria
+  java_developer:
+    description: Create a skill that is an expert at developing java applications,
+      reviews code and untangles logic as modularly as possible, and always handles
+      all error cases.
+    status: experimental
+    required_ad_group: IDP-Platform-Engineers
+    allowed_models:
+    - qwen-coder-sec-7b
+    - qwen-coder-sec-2.5b
+    approval_required: true
+    execution_backend: swarm
+    source_repo: https://github.com/mogindi/ai-skills.git
+    source_path: skills/java-developer
+    source_ref: main
+    version: 0.1.0
+    owner: IDP-Platform-Engineers
+    last_validated_at: '2026-07-15'
+    swarm:
+      max_rounds: 3
+      acceptance_criteria:
+      - Task scope is identified
+      - Developer implementation notes are produced
+      - Tester validation notes are produced
+      - Auditor blocking findings are resolved
+      - Project manager accepts delivery
+      roles:
+      - id: developer-1
+        role: developer
+        phase: develop
+      - id: developer-2
+        role: developer
+        phase: develop
+      - id: tester
+        role: tester
+        phase: test
+        blocking_rules:
+        - missing_validation_evidence
+      - id: security-auditor
+        role: auditor
+        phase: audit
+        blocking_rules:
+        - unresolved_security_findings
+      - id: project-manager
+        role: project_manager
+        phase: delivery
+        blocking_rules:
+        - unresolved_security_findings
+        - unmet_acceptance_criteria
